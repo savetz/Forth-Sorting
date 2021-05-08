@@ -1,0 +1,225 @@
+-------------------------------------------- SCREEN 001
+(                        <10/ 5/83>  1) 
+CREATE SORT 1200 ALLOT                  
+VARIABLE #ELEMENTS                      
+VARIABLE DISTANCE                       
+VARIABLE VI                             
+VARIABLE VJ                             
+VARIABLE SEED  HERE SEED !              
+HEX                                     
+: RND                                   
+   SEED @ 103 * 3 + 7FFF AND            
+      DUP SEED ! 7FFF */ ;              
+                                        
+: RANDOM                                
+   #ELEMENTS @ 0                        
+      DO FF RND                         
+         I 4 * SORT + !                 
+ FF RND I 4 * 2 + SORT + !              
+          LOOP ;                        
+DECIMAL                                 
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 002
+(                        <10/ 5/83>  2) 
+                                        
+CREATE RES 4 ALLOT                      
+                                        
+: NUM(I)  @ 4 * 2 + SORT + ;            
+: NUMI@  NUM(I) @ ;                     
+                                        
+: COMPARE VI NUMI@ VJ NUMI@ < ;         
+                                        
+: NUMSWAP                               
+   VI @ 4 * SORT + RES 4 CMOVE          
+   VJ @ 4 * SORT + VI @ 4 * SORT +      
+   4 CMOVE                              
+   RES VJ @ 4 * SORT + 4 CMOVE ;        
+                                        
+: NUMLIST                               
+   #ELEMENTS @ 0 DO I 4 * SORT +        
+   @ . I 4 * 2 + SORT + @ . KEY DROP    
+   CR LOOP ;                            
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 003
+(                        <10/ 5/83>  3) 
+                                        
+: SETDIST                               
+   1 BEGIN 2 * DUP #ELEMENTS @ >        
+       UNTIL 2 / 1 - DISTANCE ! ;       
+                                        
+: DECDIST                               
+   DISTANCE @ 2 / DUP DISTANCE ! 1 < ;  
+                                        
+: SHELLSORT SETDIST BEGIN               
+   #ELEMENTS @ DISTANCE @ - 0 DO        
+   -1 I DO                              
+   I DUP VI ! DISTANCE @ + VJ ! COMPARE 
+   IF NUMSWAP ELSE LEAVE THEN DISTANCE  
+   @ NEGATE +LOOP LOOP DECDIST UNTIL    
+;                                       
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 004
+(                        <10/ 5/83>  2) 
+                                        
+                                        
+                                        
+: NSWAP VJ ! VI !                       
+   VI @ 4 * SORT + RES 4 CMOVE          
+   VJ @ 4 * SORT + VI @ 4 * SORT +      
+   4 CMOVE                              
+   RES VJ @ 4 * SORT + 4 CMOVE ;        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 005
+(                        <10/ 5/83>  4) 
+-9 CONSTANT MM  0 CONSTANT MID          
+: <=  DDUP = ROT ROT < OR ;             
+: >=  DDUP = ROT ROT > OR ;             
+: S@  4 * 2 + SORT + @ NEGATE ;         
+: INSERT ( N)                           
+    1 DO I BEGIN                        
+             1 - DUP 0 >= OVER          
+    DUP S@ SWAP 1+ S@ > AND             
+          WHILE DUP DUP 1+ NSWAP        
+          REPEAT                        
+      DROP LOOP ;                       
+: NEXT-GROUP  DOVER - DUP DOVER - DUP   
+       ROT MIN MM >                     
+       IF DDROP DDROP DDROP             
+       ELSE > IF DSWAP THEN             
+           DDUP - MM > IF DDROP THEN    
+       THEN ;                           
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 006
+(                        <10/ 5/83>  5) 
+: PARTITION                             
+    BEGIN SWAP                          
+     BEGIN 1+ DUP S@ MID >= UNTIL SWAP  
+     BEGIN 1- DUP S@ MID <= UNTIL       
+     OVER OVER <=                       
+    WHILE OVER OVER NSWAP               
+    REPEAT ;                            
+: QUICK -5 0 #ELEMENTS @ 1-             
+    BEGIN DDUP + 2/ 3 PICK 1+ NSWAP     
+     OVER 1+ S@ OVER S@ > IF OVER 1+    
+     OVER NSWAP THEN                    
+     OVER S@ OVER S@ > IF DDUP NSWAP    
+     THEN                               
+     OVER DUP 1+ S@ SWAP S@ > IF OVER   
+     DUP 1+ NSWAP THEN                  
+     OVER S@ ' MID ! OVER 1+ OVER       
+     PARTITION  DUP 5 PICK NSWAP        
+     1- ROT ROT SWAP                    
+     NEXT-GROUP DUP -5 =                
+    UNTIL                               
+     DROP #ELEMENTS @ INSERT ;          
+                                        
+                                        
+-------------------------------------------- SCREEN 007
+(                        <10/ 5/83>  5) 
+                                        
+: PARTITION DB BEGIN SWAP               
+      BEGIN 1+ DUP S@ MID >= UNTIL      
+ SWAP BEGIN 1- DUP S@ MID <= UNTIL      
+       OVER OVER <= WHILE OVER OVER     
+       NUMSWAP REPEAT DB ;              
+: QUICK -5 0 #ELEMENTS @ 1-             
+    BEGIN DDUP + 2/ 3 PICK 1+ NUMSWAP   
+     OVER 1+ S@ OVER S@ > IF OVER 1+    
+     OVER NUMSWAP THEN                  
+     OVER S@ OVER S@ > IF DDUP NUMSWAP  
+     THEN                               
+     OVER DUP 1+ S@ SWAP S@ > IF OVER   
+     DUP 1+ NUMSWAP THEN                
+     OVER S@ ' MID ! OVER 1+ OVER       
+ PARTITION  DUP 5 PICK NUMSWAP          
+     1- ROT ROT SWAP                    
+NEXT-GROUP      DUP -5 =                
+ KEY DROP UNTIL                         
+     DROP #ELEMENTS INSERT ;            
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 010
+(                        <10/ 5/83>  4) 
+-9 CONSTANT MM  0 CONSTANT MID          
+: <=  DDUP = ROT ROT < OR ;             
+: >=  DDUP = ROT ROT > OR ;             
+: S@  4 * 2 + SORT + @ ;                
+: DB  DDUP SWAP . . CR KEY 27 = IF      
+  QUIT THEN ;                           
+: INSERT ( N)                           
+    1 DO I BEGIN                        
+             1 - DUP DUP S@ SWAP 1+     
+            S@ >=                       
+          WHILE DUP DUP 1+ NUMSWAP      
+          REPEAT                        
+      DROP LOOP ;                       
+: NEXT-GROUP  DOVER - DUP DOVER - DUP   
+       ROT MIN MM >                     
+       IF DDROP DDROP DDROP             
+       ELSE > IF DSWAP THEN             
+           DDUP - MM > IF DDROP THEN    
+       THEN ;                           
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 011
+(                        <10/ 5/83> 11) 
+CREATE ELLA 300 ALLOT                   
+                                        
+: KL 31 1  DO I 10 * 1- ELLA + 5 SWAP   
+   C! LOOP ;                            
+                                        
+: RED  31 1 DO I 10 * 1- ELLA + C@ .    
+KEY DROP LOOP ;                         
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
