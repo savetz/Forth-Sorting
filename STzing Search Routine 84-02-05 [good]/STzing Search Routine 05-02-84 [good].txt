@@ -1,0 +1,1025 @@
+-------------------------------------------- SCREEN 001
+( ALPHA COMPRESSION    <<10/ 5/83>  1)  
+                                        
+:$ MMESG                                
+   .$ INSTRUCTIONS$                     
+   .$ PRESS Y TO SELECT; RET TO SKIP$   
+   .$ SELECT ITEMS OF INTEREST:$        
+   .$ PRESS > TO CONTINUE$              
+   .$ SELECT AREAS OF MOST INTEREST:$   
+   .$ ACADEMIC PROFILE$                 
+   .$ SPORTS$                           
+   .$ SELECTION REVIEW$                 
+   .$ MAIN MENU$                        
+   .$ AREAS OF STUDY$                   
+   .$ TRY IT.$                          
+   ;$                                   
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 002
+( VIRTUAL DATA BASE      <10/ 5/83>  2) 
+                                        
+: CVARIABLE CREATE 1 ALLOT ;            
+                                        
+VARIABLE VADR  VARIABLE VCNT            
+                                        
+: -ROT ROT ROT ;                        
+                                        
+: D/MOD                                 
+   >R DDUP 1 I M*/ DDUP R> 1 M*/        
+   DSWAP >R >R D- R> R> ;               
+                                        
+: @ADR                                  
+   1024 D/MOD DROP SWAP DROP 1024       
+   3 PICK - >R DUP BLOCK ROT + R> ;     
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 003
+( VIRTUAL DATA BASE      <10/ 5/83>  3) 
+                                        
+: @VIR                                  
+   VADR @ >R VCNT @ >R @ADR             
+   I OVER > IF                          
+    DDUP I' SWAP CMOVE R> OVER -        
+    R> SWAP >R + >R DROP 1+ BLOCK       
+    R> R> CMOVE                         
+   ELSE                                 
+    DROP R> R> SWAP CMOVE DROP THEN ;   
+                                        
+                                        
+: !VIR                                  
+  @ADR VCNT @ DUP >R VADR @ >R          
+  OVER > IF                             
+   DDUP I -ROT CMOVE R> OVER + R>       
+   SWAP >R SWAP - >R DROP UPDATE        
+   1+ BLOCK R> R> -ROT CMOVE            
+  ELSE                                  
+   DROP SWAP DROP R> SWAP R> CMOVE      
+  THEN UPDATE ;                         
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 004
+( ALPHA COMPRESSION      <10/ 5/83>  4) 
+ VARIABLE CNT                           
+ VARIABLE LINECNT                       
+ VARIABLE CHCNT                         
+ VARIABLE AVLADR                        
+ VARIABLE CURSCR                        
+ VARIABLE LASTADR                       
+                                        
+CREATE NEWDIR 120 ALLOT                 
+CREATE DIRBUF 200 ALLOT                 
+CREATE TEXTBUF 15000 ALLOT              
+CREATE STBLK 80 ALLOT                   
+CREATE STADR 80 ALLOT                   
+CREATE TBUF 44 ALLOT                    
+CREATE 2VADR 4 ALLOT                    
+CREATE VADRS 160 ALLOT                  
+                                        
+: EMPTYBUF 44 0 DO I TBUF + 0 SWAP C!   
+   LOOP ;                               
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 005
+( ALPHA COMPRESSION    <10/ 5/83>  5)   
+                                        
+                                        
+VARIABLE ADR2                           
+VARIABLE #MES  11 #MES !                
+VARIABLE ADR                            
+                                        
+                                        
+: CHARCOUNT  40 CHCNT ! DUP 5 +         
+   BEGIN DUP CHCNT @ + 1- C@ 32 OVER =  
+    SWAP 0 = OR CHCNT @ 1 > AND         
+   IF -1 CHCNT +! 0 ELSE 1              
+   THEN UNTIL DROP ;                    
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 006
+( ALPHA COMPRESSION    <10/ 5/83>  6)   
+                                        
+: DIFFERENT  0  CHCNT @ 0               
+   DO ADR2 @ I + C@ ADR @ I + C@ =      
+    NOT IF DROP 1 LEAVE THEN            
+   LOOP ;                               
+                                        
+: MATCH  0 #MES @ 0 DO I 1+ MMESG N$    
+   DROP DUP 1+ ADR2 ! C@ CHCNT @ =      
+    IF DIFFERENT NOT                    
+    IF DROP ." FND:" I 1+ DUP . LEAVE   
+    THEN  THEN LOOP ;                   
+: SEARCH  DUP 5 + ADR ! CHARCOUNT MATCH 
+;                                       
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 007
+( ALPHA COMPRESSION      <10/ 5/83>  7) 
+                                        
+: MOVALL                                
+   TBUF TEXTBUF AVLADR @ + CHCNT @ 3 +  
+   CMOVE ;                              
+                                        
+: !YPOS                                 
+   DUP 1+ C@ 1 TBUF + C! ;              
+                                        
+                                        
+: +LINECNT 1 LINECNT +! ;               
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 008
+( ALPHA COMPRESSION      <10/ 5/83>  8) 
+                                        
+: !CNT                                  
+   CHCNT @ TBUF 2 + C! ;                
+                                        
+: !AVLADR                               
+   CHCNT @ 3 + AVLADR +! ;              
+                                        
+: MOVETEXT                              
+   DUP 5 + TBUF 3 + CHCNT @ CMOVE ;     
+                                        
+: ?ENDLINE                              
+   47 + DUP C@ DUP 255 =                
+    IF DDROP 1 ELSE SWAP                
+    1+ @ SWAP  BLOCK + 0                
+    THEN ;                              
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 009
+( ALPFA COMPRESSION      <10/ 5/83>  9) 
+                                        
+: !CNT2  40 + TBUF 2 + C! ;             
+                                        
+: SPECIALCASE !CNT2 0 CHCNT ! ;         
+                                        
+: !LAST                                 
+    AVLADR @ LASTADR ! ;                
+: !LNCNT LINECNT @ SWAP 3 * 2 +         
+    NEWDIR + C! ;                       
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 010
+( ALPHA COMPRESSION      <10/ 5/83> 10) 
+                                        
+: TAKETEXITEMS                          
+   CNT @ 0 DO I 2 * STBLK + @ BLOCK I   
+   2 * STADR + @ + 0 LINECNT !          
+   AVLADR @ I 3 * NEWDIR + !            
+  BEGIN EMPTYBUF CHARCOUNT CHCNT @ 1 >  
+     IF !YPOS  SEARCH  ?DUP             
+      IF SPECIALCASE ELSE               
+        !CNT MOVETEXT                   
+      THEN +LINECNT MOVALL !AVLADR      
+     THEN ?ENDLINE                      
+    UNTIL                               
+     !LAST I .S CR !LNCNT LOOP ;        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 011
+( ALPHA COMPRESSION      <10/ 5/83> 11) 
+                                        
+: PUTINDIR                              
+   CNT @ 0 DO 2VADR D@ NEWDIR I 3 * +   
+   @ M+ DDUP I 4 * VADRS + D! 1 BLOCK   
+   CURSCR @ 5 * + DUP >R D! R>          
+   NEWDIR I 3 * + 2 + C@ SWAP 4 + C!    
+   1 CURSCR +! CURSCR @ . 2VADR D@ D.   
+   CR LOOP 2VADR D@ LASTADR @ M+        
+   2VADR D! UPDATE FLUSH ;              
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 012
+( ALPHA COMPRESSION      <10/ 5/83> 12) 
+                                        
+: MOVEBIGBUF                            
+    CNT @ 0 DO I CNT @ 1- =             
+   IF LASTADR @ ELSE I 1+               
+    3 * NEWDIR + @                      
+   THEN I 3 * NEWDIR +                  
+    @ DUP TEXTBUF + VADR ! - VCNT !     
+    I 4 * VADRS + D@ !VIR VADR @ . VCNT 
+    @ . I 4 * VADRS + D@ D. CR LOOP     
+    FLUSH ;                             
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 013
+( ALPHA COMPRESSION      <10/ 5/83> 13) 
+                                        
+: TAKESCR                               
+    1 BLOCK OVER 6 * + 2+               
+   DUP >R @ OVER 40 MOD 2 *             
+   STBLK + ! R> 2+ @ SWAP 40 MOD 2 *    
+   STADR + ! 1 CNT +! ;                 
+                                        
+: CHANGEFLOP  CR CR                     
+." INSERT NEW FLOPPY AND PRESS ANY KEY" 
+   CR KEY DROP ;                        
+                                        
+: OLDFLOPPY CR CR                       
+." INSERT OLD FLOPPY AND PRESS ANY KEY" 
+   CR KEY DROP ;                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 014
+( ALPHA COMPRESSION      <10/ 5/83> 14) 
+                                        
+VARIABLE II                             
+                                        
+: CONV2  PAGE OLDFLOPPY                 
+( 2048. 2VADR D! 0 CNT ! 0 CURSCR ! )   
+     0 II !                             
+    BEGIN                               
+     II @ TAKESCR                       
+     CR CNT @ 20 =   II @ 16 = OR       
+   IF  0 AVLADR ! TAKETEXITEMS          
+     CHANGEFLOP PUTINDIR                
+     MOVEBIGBUF II @ 16 = NOT           
+    IF                                  
+     OLDFLOPPY                          
+    THEN 0 CNT !                        
+   THEN ." % " II @ . CR                
+    1 II +! II @ 17 =                   
+ UNTIL ;                                
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 015
+( ALPHA COMPRESSION      <10/ 5/83> 15) 
+                                        
+DVARIABLE VIR-BASE                      
+                                        
+CREATE BUF 3 ALLOT                      
+                                        
+: HVTAB SWAP +EDX + SWAP +EDY + XYTAB ; 
+: .TEXT                                 
+      TBUF DUP C@ SWAP 1 + C@           
+      HVTAB TBUF 2 + C@ DUP 40 >        
+     IF                                 
+      40 - MMESG N$.                    
+      ELSE TBUF 3 + SWAP TYPE           
+     THEN ;                             
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 016
+( ALPHA COMPRESSION      <10/ 5/83> 16) 
+                                        
+: @SCRN ( SCR# -- )                     
+   PAGE TBUF VADR ! 43 VCNT !           
+   1 BLOCK SWAP 5 * + DUP 4 + C@ >R     
+   D@ DDUP VIR-BASE D! @VIR R> 0        
+   DO .TEXT VIR-BASE D@ TBUF 2 + C@     
+   DUP 40 > IF DROP 0 THEN              
+     3 + M+ DDUP VIR-BASE D! @VIR       
+   LOOP ;                               
+                                        
+: SHOWALL 0 DO I @SCRN KEY DROP LOOP ;  
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 017
+( ALPHA COMPRETION       <10/ 5/83> 17) 
+                                        
+VARIABLE II                             
+                                        
+: CONV  PAGE OLDFLOPPY                  
+   2048. 2VADR D! 0 CNT ! 0 CURSCR !    
+   0 II !                               
+   BEGIN                                
+   II @ TAKESCR                         
+   CR CNT @ 40 = II @ 168 = OR          
+   IF  0 AVLADR ! TAKETEXITEMS          
+    CHANGEFLOP PUTINDIR                 
+    MOVEBIGBUF II @ 168 = NOT IF        
+    OLDFLOPPY                           
+   THEN 0 CNT ! THEN ." % " II @ . CR   
+    1 II +! II @ 169 =  UNTIL ;         
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 018
+( MAXLINE SEARCH         <10/ 5/83> 18) 
+                                        
+  VARIABLE MSCR#                        
+  VARIABLE MMSCR                        
+  VARIABLE MAXCNT                       
+  VARIABLE LINECNT                      
+: <=  DDUP = ROT ROT < OR ;             
+: .MTEXT TBUF 2 + C@ 40 <=              
+    IF TBUF 2 + C@ MAXCNT @ < NOT       
+     IF TBUF 2 + C@ MAXCNT !            
+      0 LINECNT @ HVTAB TBUF 3 +        
+      MAXCNT @ TYPE 1 LINECNT +!        
+      MSCR# @ DUP 3 + 32 EMIT . MMSCR ! 
+     THEN                               
+    THEN ;                              
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 019
+( MAXLINE SEARCH     <10/<10/ 5/83> 19) 
+                                        
+: @SCRM ( SCR# -- ) DUP MSCR# !         
+   TBUF VADR ! 43 VCNT !                
+   1 BLOCK SWAP 5 * + DUP 4 + C@ >R     
+   D@ DDUP VIR-BASE D! @VIR R> 0        
+   DO .MTEXT VIR-BASE D@ TBUF           
+   2 + C@                               
+   DUP 40 > IF DROP 0 THEN              
+     3 + M+ DDUP VIR-BASE D! @VIR       
+   LOOP ;                               
+: SHOWMAX ( SCR# -- )                   
+     0 PAGE MAXCNT ! 0 LINECNT !        
+     0 DO I  @SCRM LOOP ;               
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 020
+(                        <10/ 5/83> 20) 
+                                        
+  VARIABLE MSCR#                        
+  VARIABLE MMSCR                        
+  VARIABLE MAXCNT                       
+  VARIABLE LINECNT                      
+: <=  DDUP = ROT ROT < OR ;             
+: .MTEXT TBUF 2 + C@ 40 <=              
+    IF TBUF 2 + C@ MAXCNT @ < NOT       
+     IF TBUF 2 + C@ MAXCNT !            
+      0 LINECNT @ HVTAB TBUF 3 +        
+      MAXCNT @ TYPE 1 LINECNT +!        
+      MSCR# @ DUP 3 + 32 EMIT . MMSCR ! 
+    THEN                                
+     THEN ;                             
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 021
+( ALPHA COMPRESSION      <10/ 5/83> 22) 
+: @SCRM ( SCR# -- ) DUP MSCR# !         
+   TBUF VADR ! 43 VCNT !                
+   1 BLOCK SWAP 5 * + DUP 4 + C@ >R     
+   D@ DDUP VIR-BASE D! @VIR R> 0        
+   DO .MTEXT VIR-BASE D@ TBUF           
+   2 + C@                               
+   DUP 40 > IF DROP 0 THEN              
+     3 + M+ DDUP VIR-BASE D! @VIR       
+   LOOP ;                               
+                                        
+: SHOWMAX 0 PAGE MAXCNT ! 0 LINECNT !   
+   0 DO I @SCRM                         
+LOOP ;                                  
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 025
+(                        <10/ 5/83> 26) 
+                                        
+VARIABLE II                             
+                                        
+: CONV  PAGE OLDFLOPPY                  
+   2048. 2VADR D! 0 CNT ! 0 CURSCR !    
+   0 II ! BEGIN II @                    
+ ( 17 0 DO I ) TAKESCR                  
+   CR CNT @ 10 =   II @ 168 = OR        
+   IF  0 AVLADR ! TAKETEXITEMS          
+    CHANGEFLOP PUTINDIR                 
+    MOVEBIGBUF II @ 168 = NOT IF        
+    OLDFLOPPY                           
+   THEN 0 CNT ! THEN ." % " II @ . CR   
+    1 II +! II @ 169 =  UNTIL ;         
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 026
+(                        <10/ 5/83> 26) 
+                                        
+: CONV OLDFLOPPY                        
+   2048. 2VADR D! 0 CNT ! 0 CURSCR !    
+   17 0 DO I TAKESCR CNT @ 10 =         
+    I 16 = OR                           
+   IF 0 AVLADR ! TAKETEXITEMS ." # "    
+DUP . CR CHANGEFLOP PUTINDIR            
+   MOVEBIGBUF I 16 = NOT IF  OLDFLOPPY  
+ THEN 0 CNT ! THEN ." % " DUP . CR LOOP 
+;                                       
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 028
+( VIRTUAL DATA BASE      <10/ 5/83> 20) 
+                                        
+: CVARIABLE CREATE 1 ALLOT ;            
+                                        
+VARIABLE VADR  VARIABLE VCNT            
+                                        
+: -ROT ROT ROT ;                        
+                                        
+: D/MOD                                 
+   >R DDUP 1 I M*/ DDUP R> 1 M*/        
+   DSWAP >R >R D- R> R> ;               
+                                        
+: @ADR                                  
+   1024 D/MOD DROP SWAP DROP 1024       
+   3 PICK - >R DUP BLOCK ROT + R> ;     
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 029
+( VIRTUAL DATA BASE      <10/ 5/83> 21) 
+                                        
+: @VIR                                  
+   VADR @ >R VCNT @ >R @ADR             
+   I OVER > IF                          
+    DDUP I' SWAP CMOVE R> OVER -        
+    R> SWAP >R + >R DROP 1+ BLOCK       
+    R> R> CMOVE                         
+   ELSE                                 
+    DROP R> R> SWAP CMOVE DROP THEN ;   
+                                        
+                                        
+: !VIR                                  
+  @ADR VCNT @ DUP >R VADR @ >R          
+  OVER > IF                             
+   DDUP I -ROT CMOVE R> OVER + R>       
+   SWAP >R SWAP - >R DROP UPDATE        
+   1+ BLOCK R> R> -ROT CMOVE            
+  ELSE                                  
+   DROP SWAP DROP R> SWAP R> CMOVE      
+  THEN UPDATE ;                         
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 033
+(                        <10/ 5/83> 23) 
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 035
+( STRING SEARCH - KMP    <10/ 5/83> 35) 
+                                        
+: CVARIABLE  CREATE 1 ALLOT ;           
+VARIABLE #CHAR                          
+CVARIABLE FOUND                         
+CREATE NXT 40 ALLOT                     
+                                        
+: SAME 3 PICK 3 PICK PAD + C@ SWAP PAD  
+ + C@ = ;                               
+                                        
+: INITNEXT NXT 40 0 FILL 0 NXT 1+ C!    
+   1 0                                  
+   BEGIN                                
+    DUP NOT SAME OR                     
+     IF 1+ SWAP 1+ DDUP NXT + C! SWAP   
+     ELSE NXT + C@                      
+     THEN                               
+   OVER #CHAR @ >                       
+   UNTIL DDROP ;                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 036
+( STRING SEARCH - KMP    <10/ 5/83> 36) 
+                                        
+: BLOCKSEARCH                           
+    BLOCK DUP >R                        
+     BEGIN                              
+      OVER NOT SWAP DUP C@ PAD          
+      5 PICK + C@ = ROT OR              
+     IF 1+ SWAP 1+ ELSE SWAP NXT + C@   
+     THEN                               
+      SWAP OVER #CHAR @ > OVER I -      
+      1024 = OR                         
+     UNTIL R> DROP OVER                 
+      #CHAR @ > FOUND C! ;              
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 037
+( STRING SEARCH - KMP    <10/ 5/83> 37) 
+                                        
+: COUNT-CHRS 0 #CHAR !                  
+   BEGIN                                
+    DUP C@ WHILE DUP C@ 127 AND         
+    OVER C! 1+ 1 #CHAR +! REPEAT DROP ; 
+                                        
+: INP CR ." LINE TO SEARCH: "           
+   PAD 1+ DUP 40 EXPECT COUNT-CHRS ;    
+                                        
+: FMES CR SWAP #CHAR @ - DUP 0 <        
+   IF 1024 + SWAP 1- ELSE SWAP          
+   THEN                                 
+   ." FOUND IN BLOCK # " .              
+   ." STARTING FROM " . ." BYTE "       
+  DROP ;                                
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 038
+( STRING SEARCH - KMP    <10/ 5/83> 38) 
+                                        
+: KMP ( ST BL#, LAST BL# )              
+   INP INITNEXT 1 SWAP 1+ ROT           
+    DO I BLOCKSEARCH FOUND C@           
+   IF I BLOCK - I FMES LEAVE            
+   ELSE DROP THEN LOOP                  
+   FOUND C@ NOT IF DROP CR              
+   ." NOT FOUND " CR THEN ;             
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 039
+(                        <10/ 5/83> 26) 
+                                        
+: CONV PAGE OLDFLOPPY                   
+   2048. 2VADR D! 0 CNT ! 0 CURSCR !    
+   17 0 DO I TAKESCR CNT @ 10 =         
+    I 16 = OR                           
+   IF 0 AVLADR ! TAKETEXITEMS ." # "    
+DUP . CR CHANGEFLOP PUTINDIR            
+   MOVEBIGBUF I 16 = NOT IF  OLDFLOPPY  
+ THEN 0 CNT ! THEN ." % " DUP . CR LOOP 
+;                                       
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 040
+( STRING SEARCH B-M      <10/ 5/83> 40) 
+                                        
+CREATE SKIP 96 ALLOT                    
+                                        
+CREATE BUF 2048 ALLOT                   
+                                        
+: CVARIABLE CREATE 1 ALLOT ;            
+                                        
+VARIABLE BLK#  VARIABLE #CHAR           
+                                        
+CVARIABLE FOUND VARIABLE FINBLK         
+                                        
+: SHIFT&READ                            
+     BUF DUP 1024 + SWAP 1024           
+     CMOVE BLK# @ BLOCK                 
+     BUF 1024 + 1024 CMOVE 1            
+     BLK# +! SWAP 1024 - SWAP ;         
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 041
+( STRING SEARCH B-M      <10/ 5/83> 41) 
+                                        
+: INDEX 32 OVER > OVER 128 > OR         
+   IF DROP 0 ELSE 32 -                  
+   THEN ;                               
+                                        
+: INITSKIP                              
+    SKIP 96 #CHAR @ FILL #CHAR @ 1+ 1   
+    DO #CHAR @ I - PAD I + C@ INDEX     
+    SKIP + C! LOOP ;                    
+                                        
+: COUNT-CHRS  0 #CHAR !                 
+    BEGIN                               
+     DUP C@ WHILE DUP C@ 127 AND        
+     OVER C! 1+ 1 #CHAR +! REPEAT       
+     DROP ;                             
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 042
+( STRING-SEARCH B-M      <10/ 5/83> 42) 
+                                        
+: NEWBL                                 
+   DDUP - 1023 >                        
+   IF BLK# @ 1- FINBLK @ > NOT          
+    IF SHIFT&READ                       
+    THEN                                
+   THEN ;                               
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 043
+( STRING-SEARCH B-M      <10/ 5/83> 43) 
+                                        
+                                        
+: MLOOP                                 
+   BEGIN                                
+     DUP PAD + C@  3 PICK BUF + C@      
+     DUP ROT =                          
+   IF DROP 1- SWAP 1- SWAP              
+     ELSE OVER #CHAR @ =                
+    IF INDEX                            
+     SKIP + C@ ROT + SWAP ELSE DDROP    
+     #CHAR @ + #CHAR @                  
+    THEN NEWBL                          
+   THEN                                 
+     DUP 1 < DUP FOUND C! 3 PICK        
+     2048 > OR                          
+   UNTIL ;                              
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 044
+( STRING-SEARCH B-M     <10/ 5/83> 44)  
+                                        
+: INP CR                                
+   ." LINE TO SEARCH: "                 
+   PAD 1+ DUP 40 EXPECT COUNT-CHRS ;    
+                                        
+: FMES CR                               
+   ." FOUND IN BLOCK # "                
+   BLK# @ 2 - . DROP                    
+   ." STARTING FROM " 1+ .              
+   ." BYTE " ;                          
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 045
+( STRING-SEARCH B-M      <10/ 5/83> 45) 
+                                        
+: FIRSTBL                               
+   BLK# @ BLOCK BUF 1024 + 1024         
+   CMOVE 1 BLK# +! SHIFT&READ ;         
+                                        
+: B-M  ( ST BL#, LAST BL# )             
+    FINBLK ! BLK# ! 0 FOUND C!          
+    INP FIRSTBL INITSKIP                
+    #CHAR @ DUP 1 - SWAP                
+    MLOOP FOUND C@                      
+   IF FMES                              
+    CR ELSE ." NOT FOUND " CR           
+   THEN ;                               
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 050
+( SEARCH FOR MESSAGES    <10/ 5/83> 39) 
+                                        
+:$ MMESG                                
+   .$ INSTRUCTIONS$                     
+   .$ PRESS Y TO SELECT; RET TO SKIP$   
+   .$ SELECT ITEMS OF INTEREST:$        
+   .$ PRESS > TO CONTINUE$              
+   .$ SELECT AREAS OF MOST INTEREST:$   
+   .$ ACADEMIC PROFILE$                 
+   .$ SPORTS$                           
+   .$ SELECTION REVIEW$                 
+   .$ MAIN MENU$                        
+   .$ AREAS OF STUDY$                   
+   ;$                                   
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                               ( 13:22) 
+-------------------------------------------- SCREEN 051
+( SEARCH FOR MESSAGES    <10/ 5/83> 40) 
+VARIABLE ADR2                           
+VARIABLE #MES  10 #MES !                
+VARIABLE ADR                            
+VARIABLE CHCNT                          
+                                        
+: CHARCOUNT  40 CHCNT ! DUP             
+   BEGIN DUP CHCNT @ + 1- C@ 32 OVER =  
+    SWAP 0 = OR CHCNT @ 1 > AND         
+   IF -1 CHCNT +! 0 ELSE 1              
+   THEN UNTIL DROP ;                    
+                                        
+: DIFFERENT  0  CHCNT @ 0               
+   DO ADR2 @ I + C@ ADR @ I + C@ =      
+    NOT IF DROP 1 LEAVE THEN            
+   LOOP ;                               
+                                        
+: MATCH #MES @ 0 DO I 1+ MMESG N$ DROP  
+   DUP 1+ ADR2 ! C@ CHCNT @             
+    = IF DIFFERENT NOT                  
+      IF ." FOUND:" I 1+ . LEAVE        
+      THEN  THEN LOOP ;                 
+: SEARCH  DUP ADR ! CHARCOUNT           
+   MATCH ;                              
+-------------------------------------------- SCREEN 099
+( PADS PRINTER LIST ROUTINE)            
+                                        
+: PLIST    ( START,FINISH -- )          
+    1 PR#   12 EMIT  1+ SWAP DO         
+       I BLOCK I ." SCREEN # " . CR     
+       24 0 DO I 2 .R SPACE I 40 *      
+         OVER + 40 -TRAILING TYPE CR    
+       LOOP DROP 8 0 DO CR LOOP LOOP    
+    0 PR# ;                             
+                                        
+: ?BLANK ( START, FINISH -- )           
+    PAGE  1+ SWAP DO                    
+       I BLOCK 0 1024 0 DO              
+         >R I OVER + C@  32 = IF        
+           R> 1+ >R                     
+         THEN  R>  LOOP                 
+       SWAP DROP  1024 = IF             
+         I . THEN                       
+    LOOP ;                              
+                                        
+                                        
+                                        
+                                        
+                                        
+-------------------------------------------- SCREEN 100
+(                        <10/ 5/83>100) 
+                                        
+                                        
+( 1 - 17 THRU ALPHA COMPRESSION R-N )   
+                                        
+( 18 - 19 THRU MAXLINE SEARCH R-N )     
+                                        
+( 35 - 38 THRU KMP STRING SEARCH )      
+                                        
+( 40 - 45 THRU B-M STRING SEARCH )      
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
